@@ -11,11 +11,18 @@ public class Transaction {
     private double amount;
 
     public Transaction(String date, String time, String description, String vendor, double amount) {
-        this.date = date;
-        this.time = time;
+        this.date = LocalDate.parse(date);
+        this.time = LocalTime.parse(time);
         this.description = description;
         this.vendor = vendor;
         this.amount = amount;
+    }
+
+    public Transaction(LocalDate date, LocalTime time, String vendor, double amount) {
+    }
+
+    public Transaction() {
+
     }
 
     public LocalDate getDate() {
@@ -56,5 +63,16 @@ public class Transaction {
 
     public void setAmount(double amount) {
         this.amount = amount;
+    }
+    public static class Deposit extends Transaction {
+        public Deposit(LocalDate date, LocalTime time, String vendor, double amount) {
+            super(date, time, vendor, amount);
+        }
+    }
+
+    public class Payment extends Transaction {
+        public Payment(LocalDate date, LocalTime time, String vendor, double amount) {
+            super(date, time, vendor, amount);
+        }
     }
 }
