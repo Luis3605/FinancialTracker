@@ -11,6 +11,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
 
 public class FinancialTracker {
@@ -59,24 +60,90 @@ public class FinancialTracker {
         scanner.close();
     }
 
-    public static void loadTransactions(String fileName) {
-        // This method should load transactions from a file with the given file name.
-        // If the file does not exist, it should be created.
-        // The transactions should be stored in the `transactions` ArrayList.
-        // Each line of the file represents a single transaction in the following format:
-        // <date>,<time>,<vendor>,<type>,<amount>
-        // For example: 2023-04-29,13:45:00,Amazon,PAYMENT,29.99
-        // After reading all the transactions, the file should be closed.
-        // If any errors occur, an appropriate error message should be displayed.
+    private static void ledgerMenu(Scanner scanner) {
+    }
+
+    private static void addPayment(Scanner scanner) {
     }
 
     private static void addDeposit(Scanner scanner) {
-        // This method should prompt the user to enter the date, time, vendor, and amount of a deposit.
-        // The user should enter the date and time in the following format: yyyy-MM-dd HH:mm:ss
-        // The amount should be a positive number.
-        // After validating the input, a new `Deposit` object should be created with the entered values.
-        // The new deposit should be added to the `transactions` ArrayList.
     }
+
+    public static void loadTransactions(String fileName) {
+        class TransactionLoader {
+
+            public static <List> void main(String[] args) {
+                String fileName = "transactions.txt";
+                List transactions = (List) loadTransactions(fileName);
+                for (Transaction transaction : transactions) {
+                    System.out.println(transaction);
+                }
+            }
+
+            public static List<Transaction> loadTransactions(String fileName) {
+                List<Transaction> transactions;
+                transactions = new ArrayList<>();
+
+                try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        String[] parts = line.split(",");
+                        if (parts.length == 5) {
+                            String date = parts[0];
+                            String time = parts[1];
+                            String vendor = parts[2];
+                            String description = parts[3];
+                            double amount = Double.parseDouble(parts[4]);
+
+                            Transaction transaction = new Transaction(date, time, vendor, description, amount);
+                            transactions.add(transaction);
+                        } else {
+                            System.err.println("Invalid transaction format: " + line);
+                        }
+                    }
+                } catch (IOException e) {
+                    System.err.println("Error loading transactions: " + e.getMessage());
+                }
+
+                return transactions;
+    }
+
+            private static <Deposit extends Transaction> void addDeposit(Scanner scanner) {
+                System.out.println("Enter the date (yyyy-MM-dd HH:mm:ss): ");
+                String dateTimeStr = scanner.nextLine();
+                LocalDate date;
+                LocalTime time;
+                try {
+                    String[] dateTimeParts = dateTimeStr.split(" ");
+                    date = LocalDate.parse(dateTimeParts[0], DATE_FORMATTER);
+                    time = LocalTime.parse(dateTimeParts[1], TIME_FORMATTER);
+                } catch (Exception e) {
+                    System.err.println("Invalid date/time format. Use yyyy-MM-dd HH:mm:ss.");
+                    return;
+                }
+
+                System.out.println("Enter the vendor: ");
+                String vendor = scanner.nextLine();
+
+                double amount;
+                while (true) {
+                    System.out.println("Enter the deposit amount: ");
+                    try {
+                        amount = Double.parseDouble(scanner.nextLine());
+                        if (amount <= 0) {
+                            System.err.println("Amount must be a positive number.");
+                        } else {
+                            break;
+                        }
+                    } catch (NumberFormatException e) {
+                        System.err.println("Invalid amount format. Please enter a positive number.");
+                    }
+                }
+
+                Deposit deposit = new Deposit(date, time, vendor, amount);
+                transactions.add(deposit);
+                System.out.println("Deposit added successfully.");
+            }
 
     private static void addPayment(Scanner scanner) {
         // This method should prompt the user to enter the date, time, vendor, and amount of a payment.
@@ -191,5 +258,7 @@ public class FinancialTracker {
         // The method loops through the transactions list and checks each transaction's vendor name against the specified vendor name.
         // Transactions with a matching vendor name are printed to the console.
         // If no transactions match the specified vendor name, the method prints a message indicating that there are no results.
+    }
+}
     }
 }
