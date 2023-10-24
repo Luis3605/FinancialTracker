@@ -4,10 +4,13 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+/**
+ * This class represents a simple financial tracker application.
+ */
 public class FinancialTracker {
     // ANSI color codes
     private static final String ANSI_RESET = "\u001B[0m";
@@ -17,19 +20,18 @@ public class FinancialTracker {
     private static final String ANSI_BG_COLOR_22 = "\u001B[48;5;22m";
     private static final String ANSI_TEXT_GOLD = "\u001B[38;5;214m";
 
-    private static final String ANSI_BLUE = "\u001B[34m";
 
-
+    // Transaction storage
     private static final ArrayList<Transaction> transactions = new ArrayList<>();
 
-    private static final String FILE_NAME = "transactions.csv";
-    private static final String DATE_FORMAT = "yyyy-MM-dd";
-    private static final String TIME_FORMAT = "HH:mm:ss";
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(DATE_FORMAT);
-    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern(TIME_FORMAT);
+    // File name for transaction data
+    private static final String fileName = "transactions.csv";
+    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+
 
     public static void main(String[] args) {
-        loadTransactions(FILE_NAME);
+        loadTransactions(fileName);
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
 
@@ -64,6 +66,7 @@ public class FinancialTracker {
 
         scanner.close();
     }
+// Displays a menu for interacting with ledger
 
     private static void ledgerMenu(Scanner scanner) {
         boolean running = true;
@@ -100,16 +103,12 @@ public class FinancialTracker {
             }
         }
     }
-
+// Allows the user to add a deposit transaction with specified details.
     private static void addDeposit(Scanner scanner) {
         System.out.println("Enter the date (yyyy-MM-dd HH:mm:ss): ");
         String dateTimeStr = scanner.nextLine();
-        LocalDate date;
-        LocalTime time;
         try {
             String[] dateTimeParts = dateTimeStr.split(" ");
-            date = LocalDate.parse(dateTimeParts[0], DATE_FORMATTER);
-            time = LocalTime.parse(dateTimeParts[1], TIME_FORMATTER);
         } catch (Exception e) {
             System.err.println(ANSI_RED + "Invalid date/time format. Use yyyy-MM-dd HH:mm:ss." + ANSI_RESET);
             return;
@@ -133,10 +132,12 @@ public class FinancialTracker {
             }
         }
 
-        Transaction deposit = new Transaction.Deposit(date, time, vendor, amount);
+        Transaction deposit = new Transaction.Deposit(vendor);
         transactions.add(deposit);
         System.out.println(ANSI_GREEN + "Deposit added successfully." + ANSI_RESET);
     }
+
+    //  Allows the user to add a payment transaction with specified details.
 
     private static void addPayment(Scanner scanner) {
         System.out.println("Enter the date (yyyy-MM-dd HH:mm:ss): ");
@@ -171,6 +172,9 @@ public class FinancialTracker {
 
 
 
+    /**
+     * Displays the ledger containing all transactions with details.
+     */
     private static void displayLedger() {
         System.out.println(ANSI_BG_COLOR_22 + ANSI_TEXT_GOLD + "Ledger");
         System.out.println(ANSI_BG_COLOR_22 + ANSI_TEXT_GOLD + "Date       Time     Vendor             Description         Amount");
@@ -184,7 +188,9 @@ public class FinancialTracker {
                     transaction.getAmount());
     }
 
-
+    /**
+     * Displays a list of deposits with their details.
+     */
     private static void displayDeposits() {
         System.out.println("Deposits");
         System.out.println("Date       Time     Vendor             Amount");
@@ -200,7 +206,9 @@ public class FinancialTracker {
             }
         }
     }
-
+    /**
+     * Displays a list of payments with their details.
+     */
     private static void displayPayments() {
         System.out.println(ANSI_BG_COLOR_22 + ANSI_TEXT_GOLD + "Payments");
         System.out.println("Date       Time     Vendor             Amount");
@@ -217,7 +225,10 @@ public class FinancialTracker {
         }
     }
 
-
+    /**
+     * Displays a menu for generating various reports based on user input.
+     * A Scanner object for user input.
+     */
     private static void reportsMenu(Scanner scanner) {
         boolean running = true;
         while (running) {
@@ -277,6 +288,8 @@ public class FinancialTracker {
         }
     }
 
+
+    // Filters and displays transactions that fall within a specified date range
     private static void filterTransactionsByDate(LocalDate startDate, LocalDate endDate) {
         System.out.println("Transactions between " + startDate + " and " + endDate);
         System.out.println("Date       Time     Vendor             Description         Amount");
@@ -295,7 +308,7 @@ public class FinancialTracker {
         }
     }
 
-
+// Filters and displays transactions for a specific vendor.
     private static void filterTransactionsByVendor(String vendor) {
         System.out.println("Transactions with Vendor: " + vendor);
         System.out.println("Date       Time     Description         Amount");
@@ -311,7 +324,7 @@ public class FinancialTracker {
         }
     }
 
-
+// Loads transactions from a CSV file and populates the transactions list.
     public static void loadTransactions(String fileName) {
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
@@ -322,13 +335,13 @@ public class FinancialTracker {
                     String time = parts[1];
                     String vendor = parts[2];
                     String description = parts[3];
-                    double amount;
 
+                    double amount;
                     try {
                         amount = Double.parseDouble(parts[4]);
                     } catch (NumberFormatException e) {
                         System.err.println("Invalid amount format on line: " + line);
-                        continue; // Skip this line and move to the next one
+                        continue;
                     }
 
                     Transaction transaction = new Transaction(date, time, vendor, description, amount);
