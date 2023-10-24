@@ -14,8 +14,10 @@ public class FinancialTracker {
     private static final String ANSI_RED = "\u001B[31m";
     private static final String ANSI_GREEN = "\u001B[32m";
     private static final String ANSI_YELLOW = "\u001B[33m";
-    private static final String ANSI_BLUE = "\u001B[34m";
+    private static final String ANSI_BG_COLOR_22 = "\u001B[48;5;22m";
+    private static final String ANSI_TEXT_GOLD = "\u001B[38;5;214m";
 
+    private static final String ANSI_BLUE = "\u001B[34m";
 
 
     private static final ArrayList<Transaction> transactions = new ArrayList<>();
@@ -32,7 +34,7 @@ public class FinancialTracker {
         boolean running = true;
 
         while (running) {
-            System.out.println(ANSI_BLUE + "Welcome to Luis' Financial App" + ANSI_RESET);
+            System.out.println(ANSI_BG_COLOR_22 + ANSI_TEXT_GOLD + "Welcome to TransactionApp" + ANSI_RESET);
             System.out.println("Choose an option:");
             System.out.println(ANSI_GREEN + "D) Add Deposit" + ANSI_RESET);
             System.out.println(ANSI_GREEN + "P) Make Payment (Debit)" + ANSI_RESET);
@@ -66,8 +68,8 @@ public class FinancialTracker {
     private static void ledgerMenu(Scanner scanner) {
         boolean running = true;
         while (running) {
-            System.out.println(ANSI_BLUE + "Ledger" + ANSI_RESET);
-            System.out.println("Choose an option:");
+            System.out.println(ANSI_BG_COLOR_22 + ANSI_TEXT_GOLD + "Ledger" + ANSI_RESET);
+            System.out.println(ANSI_BG_COLOR_22 + ANSI_TEXT_GOLD + "Choose an option:" + ANSI_RESET);
             System.out.println(ANSI_GREEN + "A) All" + ANSI_RESET);
             System.out.println(ANSI_GREEN + "D) Deposits" + ANSI_RESET);
             System.out.println(ANSI_GREEN + "P) Payments" + ANSI_RESET);
@@ -93,7 +95,7 @@ public class FinancialTracker {
                     running = false;
                     break;
                 default:
-                    System.out.println("Invalid option");
+                    System.out.println(ANSI_RED + "Invalid option" + ANSI_RESET);
                     break;
             }
         }
@@ -109,7 +111,7 @@ public class FinancialTracker {
             date = LocalDate.parse(dateTimeParts[0], DATE_FORMATTER);
             time = LocalTime.parse(dateTimeParts[1], TIME_FORMATTER);
         } catch (Exception e) {
-            System.err.println("Invalid date/time format. Use yyyy-MM-dd HH:mm:ss.");
+            System.err.println(ANSI_RED + "Invalid date/time format. Use yyyy-MM-dd HH:mm:ss." + ANSI_RESET);
             return;
         }
 
@@ -127,7 +129,7 @@ public class FinancialTracker {
                     break;
                 }
             } catch (NumberFormatException e) {
-                System.err.println("Invalid amount format. Please enter a positive number.");
+                System.err.println(ANSI_RED + "Invalid amount format. Please enter a positive number." + ANSI_RESET);
             }
         }
 
@@ -142,7 +144,7 @@ public class FinancialTracker {
         try {
             String[] dateTimeParts = dateTimeStr.split(" ");
         } catch (Exception e) {
-            System.err.println("Invalid date/time format. Use yyyy-MM-dd HH:mm:ss.");
+            System.err.println(ANSI_RED + "Invalid date/time format. Use yyyy-MM-dd HH:mm:ss." + ANSI_RESET);
             return; // Exit the method
         }
 
@@ -170,8 +172,8 @@ public class FinancialTracker {
 
 
     private static void displayLedger() {
-        System.out.println("Ledger");
-        System.out.println("Date       Time     Vendor             Description         Amount");
+        System.out.println(ANSI_BG_COLOR_22 + ANSI_TEXT_GOLD + "Ledger");
+        System.out.println(ANSI_BG_COLOR_22 + ANSI_TEXT_GOLD + "Date       Time     Vendor             Description         Amount");
 
         for (Transaction transaction : transactions)
             System.out.printf("%-10s %-8s %-20s %-20s %.2f%n",
@@ -200,7 +202,7 @@ public class FinancialTracker {
     }
 
     private static void displayPayments() {
-        System.out.println("Payments");
+        System.out.println(ANSI_BG_COLOR_22 + ANSI_TEXT_GOLD + "Payments");
         System.out.println("Date       Time     Vendor             Amount");
 
         for (Transaction transaction : transactions) {
@@ -219,14 +221,14 @@ public class FinancialTracker {
     private static void reportsMenu(Scanner scanner) {
         boolean running = true;
         while (running) {
-            System.out.println("Reports");
-            System.out.println("Choose an option:");
-            System.out.println("1) Month To Date");
-            System.out.println("2) Previous Month");
-            System.out.println("3) Year To Date");
-            System.out.println("4) Previous Year");
-            System.out.println("5) Search by Vendor");
-            System.out.println("0) Back");
+            System.out.println(ANSI_BG_COLOR_22 + ANSI_TEXT_GOLD + "Reports" + ANSI_RESET);
+            System.out.println(ANSI_BG_COLOR_22 + ANSI_TEXT_GOLD + "Choose an option:" + ANSI_RESET);
+            System.out.println(ANSI_GREEN + "1) Month To Date");
+            System.out.println(ANSI_GREEN + "2) Previous Month");
+            System.out.println(ANSI_GREEN + "3) Year To Date");
+            System.out.println(ANSI_YELLOW + "4) Previous Year");
+            System.out.println(ANSI_YELLOW + "5) Search by Vendor");
+            System.out.println(ANSI_RED + "0) Back");
 
             String input = scanner.nextLine().trim();
 
