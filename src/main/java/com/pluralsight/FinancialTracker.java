@@ -1,5 +1,7 @@
 package com.pluralsight;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -9,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class FinancialTracker {
+    // ANSI color codes for console text formatting
     private static final String ANSI_RESET = "\u001B[0m";
     private static final String ANSI_RED = "\u001B[31m";
     private static final String ANSI_GREEN = "\u001B[32m";
@@ -16,10 +19,13 @@ public class FinancialTracker {
     private static final String ANSI_BG_COLOR_22 = "\u001B[48;5;22m";
     private static final String ANSI_TEXT_GOLD = "\u001B[38;5;214m";
 
+    // Store financial transactions in an ArrayList
     private static final ArrayList<Transaction> transactions = new ArrayList<>();
     private static final String fileName = "transactions.csv";
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
+
+    // Load existing transactions from the CSV file
     public static void main(String[] args) {
         loadTransactions(fileName);
         Scanner scanner = new Scanner(System.in);
@@ -61,6 +67,7 @@ public class FinancialTracker {
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
             while ((line = reader.readLine()) != null) {
+                // Read and parse transactions from a CSV file
                 String[] parts = line.split("\\|");
                 if (parts.length == 5) {
                     String date = parts[0];
@@ -76,6 +83,8 @@ public class FinancialTracker {
                         continue;
                     }
 
+
+                    // Create a Transaction object and add it to the list
                     Transaction transaction = new Transaction(date, time, vendor, description, amount);
                     transactions.add(transaction);
                 } else {
@@ -87,7 +96,7 @@ public class FinancialTracker {
         }
     }
 
-    private static void addDeposit(Scanner scanner) {
+    private static void addDeposit(@NotNull Scanner scanner) {
         System.out.println("Enter the date (yyyy-MM-dd HH:mm:ss): ");
         String dateTimeStr = scanner.nextLine();
         try {
@@ -114,13 +123,13 @@ public class FinancialTracker {
                 System.err.println(ANSI_RED + "Invalid amount format. Please enter a positive number." + ANSI_RESET);
             }
         }
-
+        // Create a Deposit transaction and add it to the list
         Transaction deposit = new Transaction.Deposit(vendor);
         transactions.add(deposit);
         System.out.println(ANSI_GREEN + "Deposit added successfully." + ANSI_RESET);
     }
 
-    private static void addPayment(Scanner scanner) {
+    private static void addPayment(@NotNull Scanner scanner) {
         System.out.println("Enter the date (yyyy-MM-dd HH:mm:ss): ");
         String dateTimeStr = scanner.nextLine();
         try {
@@ -248,12 +257,14 @@ public class FinancialTracker {
 
             switch (input) {
                 case "1":
+                    // Generate a report for the current month's transactions
                     LocalDate today = LocalDate.now();
                     LocalDate startOfMonth = today.withDayOfMonth(1);
                     filterTransactionsByDate(startOfMonth, today);
                     break;
 
                 case "2":
+                    // Generate a report for the previous month's transactions
                     today = LocalDate.now();
                     LocalDate firstDayOfCurrentMonth = today.withDayOfMonth(1);
                     LocalDate lastDayOfLastMonth = firstDayOfCurrentMonth.minusDays(1);
@@ -262,12 +273,14 @@ public class FinancialTracker {
                     break;
 
                 case "3":
+                    // Generate a report for year-to-date transactions
                     today = LocalDate.now();
                     LocalDate startOfYear = today.withDayOfYear(1);
                     filterTransactionsByDate(startOfYear, today);
                     break;
 
                 case "4":
+                    // Generate a report for the previous year's transactions
                     today = LocalDate.now();
                     startOfYear = today.withDayOfYear(1);
                     LocalDate endOfLastYear = startOfYear.minusDays(1);
@@ -276,6 +289,7 @@ public class FinancialTracker {
                     break;
 
                 case "5":
+                    // Search for transactions by vendor
                     System.out.print("Enter the vendor name: ");
                     String vendorName = scanner.nextLine();
                     filterTransactionsByVendor(vendorName);
