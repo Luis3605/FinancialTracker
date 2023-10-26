@@ -33,7 +33,7 @@ public class FinancialTracker {
 
         while (running) {
             System.out.println(ANSI_BG_COLOR_22 + ANSI_TEXT_GOLD + "Welcome to TransactionApp" + ANSI_RESET);
-            System.out.println("Choose an option:");
+            System.out.println(ANSI_BG_COLOR_22 + ANSI_TEXT_GOLD + "Choose an option:");
             System.out.println(ANSI_GREEN + "D) Add Deposit" + ANSI_RESET);
             System.out.println(ANSI_GREEN + "P) Make Payment (Debit)" + ANSI_RESET);
             System.out.println(ANSI_GREEN + "L) Ledger" + ANSI_RESET);
