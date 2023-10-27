@@ -83,8 +83,4 @@ Budgeting Tools: Implement budget tracking features to help users manage their f
 
 
 
-This README provides an overview of the Financial Tracker application, how to use it, and outlines potential future features to enhance its functionality. Users and developers can easily understand its purpose and how they can get involved in the project.
-
-
-
-
+This README describes the Financial Tracker program, including how to use it and what features could be added in the future to make it more functional. Both developers and users can quickly grasp the project's goals and how to participate in it.
