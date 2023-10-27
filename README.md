@@ -73,9 +73,10 @@ Future Features
 
 I have plans to enhance the Financial Tracker application with the following features:
 
+
 User Authentication: Implement user accounts with secure login mechanisms to protect financial data.
 
-Data Visualization: Integrate data visualization to provide graphs and charts for a better overview of financial trends.
+
 
 Budgeting Tools: Implement budget tracking features to help users manage their finances more effectively.
 
