@@ -14,7 +14,7 @@ Reports: Generate reports for the current month, previous month, year-to-date, o
 
 Search by Vendor: Filter transactions based on vendor names.
 
-Error Handling: Comprehensive error handling to ensure data integrity.
+Error Handling: Error handling to ensure data integrity.
 
 
 
